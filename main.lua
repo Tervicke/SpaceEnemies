@@ -112,6 +112,7 @@ end
 function gameover()
 	game_running= false;
 	print(enemy_speed)
+	enemy_speed = 0.5
 	current_enemies = {}
 	bullets = {}
 end
