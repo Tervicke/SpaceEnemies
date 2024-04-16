@@ -8,5 +8,5 @@ make
 
 ## Todo
 - [ ] Add more enemies
-- [ ] Add sound effects
+- [x] Add sound effects
 - [ ] compile it to javascript
