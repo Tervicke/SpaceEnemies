@@ -3,7 +3,10 @@ function love.load()
 	love.window.setMode(600, 600)
 	game_running = true
 	anim8 = require "anim8"
-
+	
+	--sound
+	shoot_sound = love.audio.newSource("assets/shoot.mp3","static")
+	playingsounds = {}
 
 	player = {}
 	player.speed = 3 
@@ -78,10 +81,17 @@ function love.update(dt)
 	update_enemy_positions() --update enemy position
 	check_collision()
 	update_bullets_position()
+	--check if sound is closed
+	for i = #playingsounds, 1, -1 do
+        local source = playingsounds[i]
+        if not source:isPlaying() then
+            table.remove(playingsounds, i)
+        end
+    end
 end
 
 function love.keypressed(key)
-	if key == "space" and game_running then 
+	if key == "space" and game_running and #playingsounds <= 0 then 
 		local bullet = {
 			speed = 15,
 			x = player.x ,
@@ -89,6 +99,8 @@ function love.keypressed(key)
 			width = 16*3,
 			height= 16*3,
 		}
+		shoot_sound:play()
+		table.insert(playingsounds,shoot_sound)
 		table.insert(bullets,bullet)
 	end
 	if key == "return" and not game_running then 
@@ -184,4 +196,3 @@ function checkCollision(x1, y1, w1, h1, x2, y2, w2, h2)
     -- If both x-axis and y-axis intersections occur, rectangles overlap
     return true
 end
-
