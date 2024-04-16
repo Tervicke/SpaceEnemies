@@ -4,4 +4,8 @@ note: you must have lua and love2d installed on your system
 ```bash
 make
 ```
-##screenshots
+## screenshots
+
+## Todo
+- [ ] Add more enemies
+- [ ] Add sound effects
