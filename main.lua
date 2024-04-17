@@ -32,24 +32,35 @@ function love.load()
 	Score = 0
 end
 
+local spawnTimer = 0
+local difficultyTimer = 0
+local spawn_delay = 2
+local difficulty_delay = 10 --after every n secons game gets faster and harder
+local no_of_enemies_spawn = 2
+
 function newEnemy()
 	local enemy =  {}
 	enemy.x = math.random(30,500)
 	enemy.y = math.random(0,200)
-	enemy.visible = true
-	enemy.sprite_sheet =  love.graphics.newImage("assets/enemy_1.png")
-	enemy.grid  = anim8.newGrid(16,16,enemy.sprite_sheet:getWidth() ,enemy.sprite_sheet:getHeight() )
-	enemy.animation = anim8.newAnimation(enemy.grid("1-4",1),0.2)
+	local rand = math.random(1,4)
+	if rand == 1 then 
+		enemy.sprite_sheet =  love.graphics.newImage("assets/enemy_1.png")
+		enemy.grid  = anim8.newGrid(16,16,enemy.sprite_sheet:getWidth() ,enemy.sprite_sheet:getHeight() )
+		enemy.animation = anim8.newAnimation(enemy.grid("1-4",1),0.2)
+	elseif rand == 2 then
+		enemy.sprite_sheet =  love.graphics.newImage("assets/enemy_2.png")
+		enemy.grid  = anim8.newGrid(16,16,enemy.sprite_sheet:getWidth() ,enemy.sprite_sheet:getHeight() )
+		enemy.animation = anim8.newAnimation(enemy.grid("1-4",1),0.2)
+	else
+		enemy.sprite_sheet =  love.graphics.newImage("assets/enemy_3.png")
+		enemy.grid  = anim8.newGrid(16,16,enemy.sprite_sheet:getWidth() ,enemy.sprite_sheet:getHeight() )
+		enemy.animation = anim8.newAnimation(enemy.grid("1-5",1),0.2)
+	end
 	enemy.width = 16*3
 	enemy.height = 16*3
 	table.insert(current_enemies,enemy)
 end
 
-local spawnTimer = 0
-local difficultyTimer = 0
-local spawn_delay = 2
-local difficulty_delay = 10 --after every n secons game gets faster and harder
-local no_of_enemies_spawn = 1
 function love.update(dt)
 	if love.keyboard.isDown("right") or love.keyboard.isDown("d") and game_running then
 		if not (player.x + player.speed >= 500) then
@@ -71,10 +82,14 @@ function love.update(dt)
 	if difficultyTimer >= difficulty_delay and game_running then
 		if not (enemy_speed == 1.75) then 
 			enemy_speed = enemy_speed + 0.25
+		else
+			difficulty_delay = 30
+			no_of_enemies_spawn = no_of_enemies_spawn + 1;
 		end
 		difficultyTimer = 0
 	end
 	if spawnTimer >= spawn_delay and game_running then
+		newEnemy() --spawn new enemeies at random x and y pos
 		newEnemy() --spawn new enemeies at random x and y pos
 		spawnTimer = 0
 	end
@@ -123,15 +138,12 @@ function update_enemy_positions()
 end
 function gameover()
 	game_running= false;
-	print(enemy_speed)
 	enemy_speed = 0.5
 	current_enemies = {}
 	bullets = {}
 end
 function update_bullets_position()	
 	local bulletsToRemove= {}
-	local vx = 0
-	local vy = 0
 	for i = 1, #bullets do
 		bullets[i].y = bullets[i].y - bullet_speed
 	end
