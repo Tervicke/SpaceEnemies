@@ -34,7 +34,7 @@ end
 
 local spawnTimer = 0
 local difficultyTimer = 0
-local spawn_delay = 2
+local spawn_delay = math.random(1,3)
 local difficulty_delay = 10 --after every n secons game gets faster and harder
 local no_of_enemies_spawn = 2
 
@@ -91,6 +91,7 @@ function love.update(dt)
 	if spawnTimer >= spawn_delay and game_running then
 		newEnemy() --spawn new enemeies at random x and y pos
 		newEnemy() --spawn new enemeies at random x and y pos
+		spawn_delay = math.random(1,3)
 		spawnTimer = 0
 	end
 	update_enemy_positions() --update enemy position
