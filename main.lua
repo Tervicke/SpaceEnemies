@@ -1,7 +1,9 @@
 function love.load()
 	love.graphics.setDefaultFilter("nearest","nearest")
 	love.window.setMode(600, 600)
-	game_running = true
+
+	game_running = false 
+	selected_text  = "Exit";
 	anim8 = require "anim8"
 	
 	--sound
@@ -62,6 +64,7 @@ function newEnemy()
 end
 
 function love.update(dt)
+	--game input 
 	if love.keyboard.isDown("right") or love.keyboard.isDown("d") and game_running then
 		if not (player.x + player.speed >= 500) then
 			player.x = player.x + player.speed
@@ -107,6 +110,16 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
+	--menu input stuff
+	if key == "down" or key == "up" and not (game_running) then
+		if selected_text == "Start" then 
+			selected_text = "Exit"
+		else
+			selected_text = "Start"
+		end
+		showMenu()
+	end
+	--game input
 	if key == "space" and game_running and #playingsounds <= 0 then 
 		local bullet = {
 			speed = 15,
@@ -120,10 +133,14 @@ function love.keypressed(key)
 		table.insert(bullets,bullet)
 	end
 	if key == "return" and not game_running then 
-		game_running = true
-		Score = 0
-	end
-end 
+		if selected_text == "Start" then
+			game_running = true
+		end
+		if selected_text == "Exit" then
+			love.event.quit()
+		end
+	end 
+end
 
 function update_enemy_positions()
 	if game_running and current_enemies then
@@ -156,11 +173,12 @@ end
 function love.draw()
 	love.graphics.draw(background,0,0,nil,background_scale_x,background_scale_y)
 	if not game_running then
-		love.graphics.setFont(love.graphics.newFont(44)) -- Set the font and its size
-		love.graphics.print(Score,280,300)
-		love.graphics.print("GAME OVER",170,250)
-		love.graphics.setFont(love.graphics.newFont(25)) -- Set the font and its size
-		love.graphics.print("press <enter> to restart again",120,370)
+		showMenu()
+		--love.graphics.setFont(love.graphics.newFont(44)) -- Set the font and its size
+		--love.graphics.print(Score,280,300)
+		--love.graphics.print("GAME OVER",170,250)
+		--love.graphics.setFont(love.graphics.newFont(25)) -- Set the font and its size
+		--love.graphics.print("press <enter> to restart again",120,370)
 	else
 		love.graphics.draw(player.sprite,player.x,player.y,nil,5)
 		--drawing the bullets
@@ -174,6 +192,38 @@ function love.draw()
 		love.graphics.setFont(love.graphics.newFont(24)) -- Set the font and its size
 		love.graphics.print(Score,0,0)
 	end
+end
+
+function showMenu()
+	start_text = "Start"
+	exit_text = "Exit"
+	footer_text = "Made with love by tervicke"
+	font = love.graphics.newFont("assets/Mathlete-Bulky.otf",45)
+	love.graphics.setFont(font)
+
+	if selected_text == start_text then
+		setSelectedColorText(start_text, love.graphics.getWidth()/2 - font:getWidth(start_text)/2 ,200)
+	else
+		love.graphics.print(start_text, love.graphics.getWidth()/2 - font:getWidth(start_text)/2 ,200)
+	end
+
+	if selected_text == exit_text then
+		setSelectedColorText(exit_text, love.graphics.getWidth()/2 - font:getWidth(exit_text)/2 ,250)
+	else
+		love.graphics.print(exit_text, love.graphics.getWidth()/2 - font:getWidth(exit_text)/2 ,250)
+	end
+
+
+
+	footer_font = love.graphics.newFont("assets/Mathlete-Bulky.otf",25)
+	love.graphics.setFont(footer_font)
+	love.graphics.print(footer_text, love.graphics.getWidth()/2 - footer_font:getWidth(footer_text)/2 ,500)
+end
+
+function setSelectedColorText(text,x,y) --this sets the text according to the green color which indicatd the selected color
+		love.graphics.setColor(0,1,0)
+		love.graphics.print(text,x,y)
+		love.graphics.setColor(1,1,1)
 end
 
 function check_collision()
