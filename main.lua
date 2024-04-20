@@ -1,4 +1,6 @@
 function love.load()
+	love.window.setTitle("Space Enemies")
+
 	love.graphics.setDefaultFilter("nearest","nearest")
 	love.window.setMode(600, 600)
 
