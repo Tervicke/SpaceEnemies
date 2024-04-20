@@ -5,8 +5,13 @@ note: you must have lua and love2d installed on your system
 make
 ```
 ## screenshots
+<table>
+  <tr>
+    <td><img src="screenshots/screenshot1.png.png" alt="screenshot 1"></td>
+    <td><img  src="screenshots/screenshot2.png.png" alt="screenshot 2"></td>
+   <tr>
+</table>
 
 ## Todo
-- [ ] Add more enemies
-- [x] Add sound effects
 - [ ] compile it to javascript
+
