@@ -7,8 +7,8 @@ make
 ## screenshots
 <table>
   <tr>
-    <td><img src="screenshots/screenshot1.png.png" alt="screenshot 1"></td>
-    <td><img  src="screenshots/screenshot2.png.png" alt="screenshot 2"></td>
+    <td><img src="screenshots/screenshot1.png" alt="screenshot 1"></td>
+    <td><img  src="screenshots/screenshot2.png" alt="screenshot 2"></td>
    <tr>
 </table>
 
