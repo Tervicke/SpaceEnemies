@@ -3,7 +3,7 @@ function love.load()
 	love.window.setMode(600, 600)
 
 	game_running = false 
-	menu_list = {"Start","Exit",}
+	menu_list = {"Start","Exit"}
 	selected_text  = "Start";
 	anim8 = require "anim8"
 	
@@ -110,8 +110,36 @@ function love.update(dt)
     end
 end
 
+
+--get the index of a value in table
+function indexOf(t, value)
+    for i, v in ipairs(t) do
+        if v == value then
+            return i
+        end
+    end
+    return nil -- return nil if the value is not found
+end
+
 function love.keypressed(key)
 	--menu input stuff
+	if not game_running then
+		local current_index = indexOf(menu_list , selected_text)
+		if key == "down" or key == "s" then 
+			if not (current_index == #menu_list) then
+				current_index = current_index + 1
+				selected_text = menu_list[current_index]
+				showMenu()
+			end 
+		end
+		if key == "up" or key == "w" then 
+			if not (current_index == 1 ) then 
+				current_index = current_index - 1
+				selected_text = menu_list[current_index]
+				showMenu()
+			end
+		end
+	end
 	--game input
 	if key == "space" and game_running and #playingsounds <= 0 then 
 		local bullet = {
@@ -147,6 +175,7 @@ function update_enemy_positions()
 		end
 	end 
 end
+
 function gameover()
 	game_running= false;
 	enemy_speed = 0.5
@@ -192,28 +221,14 @@ function showMenu()
 	exit_text = "Exit"
 	font = love.graphics.newFont("assets/Mathlete-Bulky.otf",45)
 	love.graphics.setFont(font)
-	
-	--[[
-	if selected_text == start_text then
-		setSelectedColorText(start_text, love.graphics.getWidth()/2 - font:getWidth(start_text)/2 ,200)
-	else
-		love.graphics.print(start_text, love.graphics.getWidth()/2 - font:getWidth(start_text)/2 ,200)
-	end
 
-	if selected_text == exit_text then
-		setSelectedColorText(exit_text, love.graphics.getWidth()/2 - font:getWidth(exit_text)/2 ,250)
-	else
-		love.graphics.print(exit_text, love.graphics.getWidth()/2 - font:getWidth(exit_text)/2 ,250)
-	end
-	--]]	
-	y_cor = 200
+	local y_cor = 200
 	for i=1,#menu_list do
 		text = menu_list[i]
 		if text == selected_text then
 			setSelectedColorText(text,love.graphics.getWidth()/2 - font:getWidth(text)/2,y_cor)
 		else
 			love.graphics.print(text, love.graphics.getWidth()/2 - font:getWidth(text)/2 ,y_cor)
-			print(y_cor)
 		end
 		y_cor = y_cor + 50
 	end
