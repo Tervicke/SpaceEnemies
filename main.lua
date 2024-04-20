@@ -3,7 +3,8 @@ function love.load()
 	love.window.setMode(600, 600)
 
 	game_running = false 
-	selected_text  = "Exit";
+	menu_list = {"Start","Exit",}
+	selected_text  = "Start";
 	anim8 = require "anim8"
 	
 	--sound
@@ -111,14 +112,6 @@ end
 
 function love.keypressed(key)
 	--menu input stuff
-	if key == "down" or key == "up" and not (game_running) then
-		if selected_text == "Start" then 
-			selected_text = "Exit"
-		else
-			selected_text = "Start"
-		end
-		showMenu()
-	end
 	--game input
 	if key == "space" and game_running and #playingsounds <= 0 then 
 		local bullet = {
@@ -197,10 +190,10 @@ end
 function showMenu()
 	start_text = "Start"
 	exit_text = "Exit"
-	footer_text = "Made with love by tervicke"
 	font = love.graphics.newFont("assets/Mathlete-Bulky.otf",45)
 	love.graphics.setFont(font)
-
+	
+	--[[
 	if selected_text == start_text then
 		setSelectedColorText(start_text, love.graphics.getWidth()/2 - font:getWidth(start_text)/2 ,200)
 	else
@@ -212,9 +205,21 @@ function showMenu()
 	else
 		love.graphics.print(exit_text, love.graphics.getWidth()/2 - font:getWidth(exit_text)/2 ,250)
 	end
+	--]]	
+	y_cor = 200
+	for i=1,#menu_list do
+		text = menu_list[i]
+		if text == selected_text then
+			setSelectedColorText(text,love.graphics.getWidth()/2 - font:getWidth(text)/2,y_cor)
+		else
+			love.graphics.print(text, love.graphics.getWidth()/2 - font:getWidth(text)/2 ,y_cor)
+			print(y_cor)
+		end
+		y_cor = y_cor + 50
+	end
 
-
-
+	--print the footer
+	footer_text = "Made with love by tervicke"
 	footer_font = love.graphics.newFont("assets/Mathlete-Bulky.otf",25)
 	love.graphics.setFont(footer_font)
 	love.graphics.print(footer_text, love.graphics.getWidth()/2 - footer_font:getWidth(footer_text)/2 ,500)
